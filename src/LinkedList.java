@@ -44,7 +44,18 @@ public class LinkedList {
 	 * NoSuchElementException.
 	 */
 	public int getFirst() {
-		return 0;
+
+		try {
+
+			if (isEmpty()) {
+				throw new NoSuchElementException();
+			}
+
+		} catch (NoSuchElementException ex) {
+			ex.getMessage();
+		}
+
+		return head.data;
 	}
 
 	/*
@@ -52,7 +63,26 @@ public class LinkedList {
 	 * NoSuchElementException.
 	 */
 	public int getLast() {
-		return 0;
+
+		try {
+
+			if (isEmpty()) {
+				throw new NoSuchElementException();
+			}
+
+		} catch (NoSuchElementException ex) {
+			ex.getMessage();
+		}
+
+		Node current = head;
+
+		while (current.next != null) {
+			current = current.next;
+
+		}
+
+		return tail.data;
+
 	}
 
 	/*
@@ -60,7 +90,22 @@ public class LinkedList {
 	 * IndexOutOfBoundsException.
 	 */
 	public int getAt(int index) {
-		return 0;
+
+		if (index < 0 || index > size) {
+
+			throw new IndexOutOfBoundsException();
+
+		}
+
+		Node current = head;
+
+		for (int x = 0; x != index; x++) {
+
+			current = current.next;
+
+		}
+
+		return current.data;
 	}
 
 	/*
@@ -73,22 +118,20 @@ public class LinkedList {
 
 			head = newNode;
 			tail = newNode;
-			
+
 			head.next = tail;
-			
+
 		} else {
 
 			Node newNode = new Node(num);
-			
+
 			newNode.next = head;
-			
+
 			head = newNode;
-			
 
 		}
-		
-		tail.next = null;
 
+		tail.next = null;
 
 		size++;
 	}
@@ -98,20 +141,35 @@ public class LinkedList {
 	 */
 	public void insertLast(int num) {
 
+		if (isEmpty()) {
+			Node newNode = new Node(num);
 
-		Node nextNode = new Node(tail.data);
-		nextNode.next = tail;
-		tail.data = num;
+			head = newNode;
+			tail = newNode;
 
-		Node current = head;
+			head.next = tail;
 
-		for (int index = 0; index < size - 1; index++) {
+		} else {
 
-			if (current.next == tail) {
-				current.next = nextNode;
+			Node nextNode = new Node(tail.data);
+			nextNode.next = tail;
+			tail.data = num;
+
+			Node current = head;
+
+			for (int index = 0; index < size - 1; index++) {
+
+				if (current.next == tail) {
+					current.next = nextNode;
+				}
+
+				current = current.next;
+
 			}
 
-			current = current.next;
+			nextNode.next = tail;
+
+			tail.next = null;
 
 		}
 
@@ -137,8 +195,16 @@ public class LinkedList {
 
 		int oldData = head.data;
 
-		head.data = (head.next).data;
-		head.next = (head.next).next;
+		if (size == 1) {
+
+			head = null;
+			tail = null;
+
+		} else {
+
+			head.data = (head.next).data;
+			head.next = (head.next).next;
+		}
 
 		size--;
 
@@ -150,7 +216,7 @@ public class LinkedList {
 	 * throw a NoSuchElementException.
 	 */
 	public int removeLast() {
-		
+
 		try {
 
 			if (isEmpty()) {
@@ -162,20 +228,29 @@ public class LinkedList {
 		}
 
 		int oldData = tail.data;
-		
-		Node current = head;
-		
-		for (int index = 0; index < size - 1; index++) {
 
-			if (current.next == tail) {
-				tail.data = current.data;
-				current.next = null;
+		if (size == 1) {
+
+			head = null;
+			tail = null;
+
+		} else {
+
+			Node current = head;
+
+			while (current.next != null) {
+
+				current = current.next;
+
 			}
 
-			current = current.next;
+			tail.data = current.data;
+			current.next = null;
+			
 
 		}
-
+		
+		
 
 		size--;
 
@@ -186,6 +261,7 @@ public class LinkedList {
 	 * Returns the number of elements in the list.
 	 */
 	public int getSize() {
+		
 		return size;
 	}
 
@@ -194,7 +270,7 @@ public class LinkedList {
 	 */
 	public boolean isEmpty() {
 
-		if (head == null) {
+		if (size == 0) {
 
 			return true;
 
