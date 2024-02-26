@@ -1,19 +1,14 @@
 import java.util.NoSuchElementException;
 
 public class LinkedList {
-
 	private Node head;
 	private Node tail;
 	private int size;
 
-	// creating a node sets next to null
-
 	/*
 	 * Creates an empty list.
 	 */
-
 	public LinkedList() {
-
 	}
 
 	/*
@@ -21,22 +16,13 @@ public class LinkedList {
 	 * contains no elements, return an empty string ""
 	 */
 	public String toString() {
-
-		if (isEmpty()) {
-			return "";
-		}
-
+		String s = "";
 		Node current = head;
-		StringBuilder output = new StringBuilder();
-
 		while (current != null) {
-
-			output.append(current.data + " ");
+			s = s + current.data + " ";
 			current = current.next;
-
 		}
-
-		return output.toString();
+		return s;
 	}
 
 	/*
@@ -44,18 +30,11 @@ public class LinkedList {
 	 * NoSuchElementException.
 	 */
 	public int getFirst() {
-
-		try {
-
-			if (isEmpty()) {
-				throw new NoSuchElementException();
-			}
-
-		} catch (NoSuchElementException ex) {
-			ex.getMessage();
+		if (head == null) {
+			throw new NoSuchElementException();
 		}
-
-		return head.data;
+		int returnValue = head.data;
+		return returnValue;
 	}
 
 	/*
@@ -63,26 +42,11 @@ public class LinkedList {
 	 * NoSuchElementException.
 	 */
 	public int getLast() {
-
-		try {
-
-			if (isEmpty()) {
-				throw new NoSuchElementException();
-			}
-
-		} catch (NoSuchElementException ex) {
-			ex.getMessage();
+		if (head == null) {
+			throw new NoSuchElementException();
 		}
-
-		Node current = head;
-
-		while (current.next != null) {
-			current = current.next;
-
-		}
-
-		return tail.data;
-
+		int returnValue = tail.data;
+		return returnValue;
 	}
 
 	/*
@@ -90,21 +54,13 @@ public class LinkedList {
 	 * IndexOutOfBoundsException.
 	 */
 	public int getAt(int index) {
-
-		if (index < 0 || index > size) {
-
-			throw new IndexOutOfBoundsException();
-
+		if (head == null || index >= size) {
+			throw new NoSuchElementException();
 		}
-
 		Node current = head;
-
-		for (int x = 0; x != index; x++) {
-
+		for (int i = 0; i < index; i++) {
 			current = current.next;
-
 		}
-
 		return current.data;
 	}
 
@@ -112,69 +68,36 @@ public class LinkedList {
 	 * Inserts an item at the beginning of the list.
 	 */
 	public void insertFirst(int num) {
-
-		if (isEmpty()) {
-			Node newNode = new Node(num);
-
-			head = newNode;
-			tail = newNode;
-
-			head.next = tail;
-
+		Node n = new Node(num);
+		if (head == null) {
+// this is the first element in list
+			head = n;
+			tail = n;
+			size++;
 		} else {
-
-			Node newNode = new Node(num);
-
-			newNode.next = head;
-
-			head = newNode;
-
+// already an existing list
+			n.next = head;
+			head = n;
+			size++;
 		}
-
-		tail.next = null;
-
-		size++;
 	}
 
 	/*
 	 * Inserts an item at the end of the list.
 	 */
 	public void insertLast(int num) {
-
-		if (isEmpty()) {
-			Node newNode = new Node(num);
-
-			head = newNode;
-			tail = newNode;
-
-			head.next = tail;
-
+		Node n = new Node(num);
+		if (head == null) {
+// this is the first element in list
+			head = n;
+			tail = n;
+			size++;
 		} else {
-
-			Node nextNode = new Node(tail.data);
-			nextNode.next = tail;
-			tail.data = num;
-
-			Node current = head;
-
-			for (int index = 0; index < size - 1; index++) {
-
-				if (current.next == tail) {
-					current.next = nextNode;
-				}
-
-				current = current.next;
-
-			}
-
-			nextNode.next = tail;
-
-			tail.next = null;
-
+// already an existing list
+			tail.next = n;
+			tail = n;
+			size++;
 		}
-
-		size++;
-
 	}
 
 	/*
@@ -182,33 +105,24 @@ public class LinkedList {
 	 * throw a NoSuchElementException.
 	 */
 	public int removeFirst() {
-
-		try {
-
-			if (isEmpty()) {
-				throw new NoSuchElementException();
-			}
-
-		} catch (NoSuchElementException ex) {
-			ex.getMessage();
+		if (head == null) {
+			throw new NoSuchElementException();
 		}
-
-		int oldData = head.data;
-
+		int returnValue = head.data;
+// is this the only element
 		if (size == 1) {
-
 			head = null;
 			tail = null;
-
+			size--;
+		} else if (size == 2) {
+			head = tail;
+			size--;
 		} else {
-
-			head.data = (head.next).data;
-			head.next = (head.next).next;
+// more than two elements in array
+			head = head.next;
+			size--;
 		}
-
-		size--;
-
-		return oldData;
+		return returnValue;
 	}
 
 	/*
@@ -216,52 +130,36 @@ public class LinkedList {
 	 * throw a NoSuchElementException.
 	 */
 	public int removeLast() {
-
-		try {
-
-			if (isEmpty()) {
-				throw new NoSuchElementException();
-			}
-
-		} catch (NoSuchElementException ex) {
-			ex.getMessage();
+		if (head == null) {
+			throw new NoSuchElementException();
 		}
-
-		int oldData = tail.data;
-
+		int returnValue = tail.data;
+// is this the only element
 		if (size == 1) {
-
 			head = null;
 			tail = null;
-
+			size--;
+		} else if (size == 2) {
+			tail = head;
+			size--;
 		} else {
-
+// more than two elements in array
+// gotta get the next to last one
 			Node current = head;
-
-			while (current.next != null) {
-
+			while (current.next != tail) {
 				current = current.next;
-
 			}
-
-			tail.data = current.data;
+			tail = current;
 			current.next = null;
-			
-
+			size--;
 		}
-		
-		
-
-		size--;
-
-		return oldData;
+		return returnValue;
 	}
 
 	/*
 	 * Returns the number of elements in the list.
 	 */
 	public int getSize() {
-		
 		return size;
 	}
 
@@ -269,23 +167,16 @@ public class LinkedList {
 	 * Returns true if the list is empty, and false otherwise.
 	 */
 	public boolean isEmpty() {
-
-		if (size == 0) {
-
-			return true;
-
-		}
-
-		return false;
+		return size == 0;
 	}
 
-	// A private Node class. By making it an inner class,
-	// the outer class can access it easily, but the client cannot.
+// A private Node class. By making it an inner class,
+// the outer class can access it easily, but the client cannot.
 	private class Node {
 		private int data;
 		private Node next;
 
-		// Constructs a new node with the specified data
+// Constructs a new node with the specified data
 		private Node(int data) {
 			this.data = data;
 			this.next = null;
